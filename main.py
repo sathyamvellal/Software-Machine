@@ -22,20 +22,6 @@ def hextobin(hex_):
 def bintohex(bin_):
     return inttohex(int(bin_, 2))
 
-class StackException(Exception):
-    def __init__(self, exceptiontype):
-        self.exceptiontype = exceptiontype
-        pass
-    
-    def __str__(self):
-        if self.exceptiontype == "overflow":
-            return "Stack Overflow! Cannot PUSH to stack anymore!"
-        elif self.exceptiontype == "empty":
-            return "Stack is Empty! Cannot POP from stack anymore!"
-        else:
-            return "Exception while accessing stack!"
-
-
 class PyASM(QtGui.QMainWindow):
     
     def __init__(self):
@@ -143,10 +129,12 @@ class PyASM(QtGui.QMainWindow):
                         "111":"0000",
                         "flags":"0000",
                         "pc":"0000",
-                        "sp":"FFFF"
+                        "sp":"FFFE"
                         }
         self.pc = 0
-        self.prevpc = self.pc
+        self.prevpc = 0
+        self.initialPC = 0
+        self.initialLoadAddress = 0
         
     def loadProgramFromFile(self):
         file = QtGui.QFileDialog.getOpenFileName(self, 'Open File', '.')
@@ -176,7 +164,7 @@ class PyASM(QtGui.QMainWindow):
         self.regbank["111"] = "0000"
         self.regbank["flags"] = "0000"
         self.regbank["pc"] = "0000"
-        self.regbank["sp"] = "FFFF"
+        self.regbank["sp"] = "10000"
         
         self.pc = self.initialPC
         i = self.initialLoadAddress
@@ -202,7 +190,7 @@ class PyASM(QtGui.QMainWindow):
             tmp = self.ui.currentInstruction.text()
             inst = hextobin(tmp)
             self.simulateInstruction(inst)
-            self.ui.currentInstruction.setText(self.regbank["pc"] + " : " + tmp)
+            self.ui.currentInstruction.setText(inttohex(self.pc) + " : " + tmp)
             self.updateUI()
             self.previnst = inst
             #print("run successful!")
@@ -395,13 +383,16 @@ class PyASM(QtGui.QMainWindow):
         
     # ------------------------- PUSH ------------------------- #
     def instruction_PUSH(self, inst):
-        try:
-            pass
-        except:
-            pass
+        intsp = int(self.regbank["sp"], 16) - 2
+        self.setWord(intsp, inttohex(self.getOperandOneWord(inst)))
+        self.regbank["sp"] = inttohex(intsp)
     
     # ------------------------- POP ------------------------- #
     def instruction_POP(self, inst):
+        intsp = int(self.regbank["sp"], 16)
+        self.setDestinationWord(inst, int(self.getWord(intsp), 16))
+        intsp += 2;
+        self.regbank["sp"] = inttohex(intsp)
         pass
 
     # ------------------------- Misc ------------------------- #
