@@ -89,8 +89,9 @@ class PyASM(QtGui.QMainWindow):
         self.ui.r7.setText("r7:     " + self.regbank["111"])
         self.regbank["pc"] = inttohex(2 * self.pc)
         self.ui.pc.setText("pc:     " + self.regbank["pc"])
+        self.ui.sp.setText("sp:     " + self.regbank["sp"])
         tmp = hextobin(self.regbank["flags"])
-        self.ui.flags.setText("Z" + tmp[-16] + 
+        self.ui.flags.setText("Flags:\n" + "Z" + tmp[-16] + 
                               ", E" + tmp[-15] + 
                               ", G" + tmp[-14] +
                               ", L" + tmp[-13])
@@ -164,7 +165,7 @@ class PyASM(QtGui.QMainWindow):
         self.regbank["111"] = "0000"
         self.regbank["flags"] = "0000"
         self.regbank["pc"] = "0000"
-        self.regbank["sp"] = "10000"
+        self.regbank["sp"] = "FFFE"
         
         self.pc = self.initialPC
         i = self.initialLoadAddress
@@ -185,12 +186,9 @@ class PyASM(QtGui.QMainWindow):
             if self.previnst != "":
                 self.ui.memory.item(self.prevpc-1, 1).setBackground(self.defaultColor)
                 if self.previnst[-2:] == "10" or self.previnst[-2:] == "11" or self.previnst[-7:-5] == "10" or self.previnst[-7:-5] == "11":
-                    self.ui.memory.item(self.prevpc-2, 1).setBackground(self.defaultColor)            
-            self.ui.currentInstruction.setText(self.nextInstruction())
-            tmp = self.ui.currentInstruction.text()
-            inst = hextobin(tmp)
+                    self.ui.memory.item(self.prevpc-2, 1).setBackground(self.defaultColor)
+            inst = hextobin(self.nextInstruction())
             self.simulateInstruction(inst)
-            self.ui.currentInstruction.setText(inttohex(self.pc) + " : " + tmp)
             self.updateUI()
             self.previnst = inst
             #print("run successful!")
@@ -383,15 +381,16 @@ class PyASM(QtGui.QMainWindow):
         
     # ------------------------- PUSH ------------------------- #
     def instruction_PUSH(self, inst):
-        intsp = int(self.regbank["sp"], 16) - 2
+        intsp = int(self.regbank["sp"], 16)
         self.setWord(intsp, inttohex(self.getOperandOneWord(inst)))
+        intsp -= 2
         self.regbank["sp"] = inttohex(intsp)
     
     # ------------------------- POP ------------------------- #
     def instruction_POP(self, inst):
         intsp = int(self.regbank["sp"], 16)
+        intsp += 2
         self.setDestinationWord(inst, int(self.getWord(intsp), 16))
-        intsp += 2;
         self.regbank["sp"] = inttohex(intsp)
         pass
 
