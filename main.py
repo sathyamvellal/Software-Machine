@@ -119,6 +119,8 @@ class PyASM(QtGui.QMainWindow):
                                  "010001":self.instruction_SUB,
                                  "010010":self.instruction_PUSH,
                                  "010011":self.instruction_POP,
+                                 "010100":self.instruction_CALL,
+                                 "010101":self.instruction_RET
                                  }
         self.regbank = {"000":"0000",
                         "001":"0000",
@@ -165,7 +167,11 @@ class PyASM(QtGui.QMainWindow):
         self.regbank["111"] = "0000"
         self.regbank["flags"] = "0000"
         self.regbank["pc"] = "0000"
-        self.regbank["sp"] = "FFFE"
+        sp, ok = QtGui.QInputDialog.getText(self, 'Input Dialog', 'Enter value of start of Stack (default : FFFE)')
+        if not ok or sp == "":
+            self.regbank["sp"] = "FFFE"
+        else:
+            self.regbank["sp"] = sp
         
         self.pc = self.initialPC
         i = self.initialLoadAddress
@@ -383,16 +389,43 @@ class PyASM(QtGui.QMainWindow):
     def instruction_PUSH(self, inst):
         intsp = int(self.regbank["sp"], 16)
         self.setWord(intsp, inttohex(self.getOperandOneWord(inst)))
-        intsp -= 2
-        self.regbank["sp"] = inttohex(intsp)
+        self.regbank["sp"] = inttohex(intsp-2)
     
     # ------------------------- POP ------------------------- #
     def instruction_POP(self, inst):
-        intsp = int(self.regbank["sp"], 16)
-        intsp += 2
+        intsp = int(self.regbank["sp"], 16) + 2
         self.setDestinationWord(inst, int(self.getWord(intsp), 16))
         self.regbank["sp"] = inttohex(intsp)
         pass
+
+    # ------------------------- CALL ------------------------- #
+    def instruction_CALL(self, inst):
+        if inst[-2:] == "00":
+            jmpdest = int(self.regbank[inst[-5:-2]], 16)
+        elif inst[-2:] == "01":
+            val = int(self.regbank[inst[-5:-2]], 16)
+            if val > 32767:
+                val -= 65536
+            jmpdest = int(self.regbank["pc"], 16) + val
+        elif inst[-2:] == "10":
+            jmpdest = int(self.nextInstruction(), 16)
+        elif inst[-2:] == "11":
+            val = int(self.nextInstruction(), 16)
+            if val > 32767:
+                val -= 65536
+            jmpdest = int(self.regbank["pc"], 16) + val
+
+        intsp = int(self.regbank["sp"], 16)
+        self.setWord(intsp, inttohex(2*self.pc))
+        self.regbank["sp"] = inttohex(intsp-2)
+
+        self.pc = int(jmpdest / 2)
+
+    # ------------------------- RET ------------------------- #
+    def instruction_RET(self, inst):
+        intsp = int(self.regbank["sp"], 16) + 2
+        self.pc = int(int(self.getWord(intsp), 16) / 2)
+        self.regbank["sp"] = inttohex(intsp)
 
     # ------------------------- Misc ------------------------- #
     def getOperandOneWord(self, inst):
