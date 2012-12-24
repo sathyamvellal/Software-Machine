@@ -74,6 +74,15 @@ class PyASM(QtGui.QMainWindow):
 		exitAction = QtGui.QAction('&Exit', self)
 		exitAction.setShortcut('Ctrl+Q')
 		exitAction.triggered.connect(QtGui.qApp.quit)
+		self.ui.r0.clicked.connect(self.showRegInfoR0)
+		self.ui.r1.clicked.connect(self.showRegInfoR1)
+		self.ui.r2.clicked.connect(self.showRegInfoR2)
+		self.ui.r3.clicked.connect(self.showRegInfoR3)
+		self.ui.r4.clicked.connect(self.showRegInfoR4)
+		self.ui.r5.clicked.connect(self.showRegInfoR5)
+		self.ui.r6.clicked.connect(self.showRegInfoR6)
+		self.ui.r7.clicked.connect(self.showRegInfoR7)
+		self.ui.pc.clicked.connect(self.showRegInfoPC)
 		
 		menubar = self.menuBar()
 		fileMenu = menubar.addMenu('&Menu')
@@ -104,21 +113,21 @@ class PyASM(QtGui.QMainWindow):
 		self.ui.flags.setText("Flags:\nZ     E     G     L  .\n")
 		self.updateUI()
 		self.show()
-	
+
 	def updateUI(self):
 		"""
 		Updates the the GUI with the backend data used by the simulator
 		"""
-		self.ui.r0.setText("r0:	 " + self.regbank["000"])
-		self.ui.r1.setText("r1:	 " + self.regbank["001"])
-		self.ui.r2.setText("r2:	 " + self.regbank["010"])
-		self.ui.r3.setText("r3:	 " + self.regbank["011"])
-		self.ui.r4.setText("r4:	 " + self.regbank["100"])
-		self.ui.r5.setText("r5:	 " + self.regbank["101"])
-		self.ui.r6.setText("r6:	 " + self.regbank["110"])
-		self.ui.r7.setText("r7:	 " + self.regbank["111"])
+		self.ui.r0.setText("R0:	       " + self.regbank["000"])
+		self.ui.r1.setText("R1:	       " + self.regbank["001"])
+		self.ui.r2.setText("R2:	       " + self.regbank["010"])
+		self.ui.r3.setText("R3:	       " + self.regbank["011"])
+		self.ui.r4.setText("R4:	       " + self.regbank["100"])
+		self.ui.r5.setText("R5:	       " + self.regbank["101"])
+		self.ui.r6.setText("R6:	       " + self.regbank["110"])
+		self.ui.r7.setText("R7:	       " + self.regbank["111"])
 		self.regbank["pc"] = inttohex(2 * self.pc)
-		self.ui.pc.setText("pc:	 " + self.regbank["pc"])
+		self.ui.pc.setText("PC:	       " + self.regbank["pc"])
 		tmp = hextobin(self.regbank["flags"])
 		self.ui.flagZ.setCheckState(int(tmp[-16]))
 		self.ui.flagE.setCheckState(int(tmp[-15]))
@@ -638,6 +647,35 @@ class PyASM(QtGui.QMainWindow):
 		"""
 		QtGui.QMessageBox.information(self, 'About', 'Software Machine\nVersion 1.3\n\nDesigned and Developed by\nSathyam M Vellal', QtGui.QMessageBox.Ok)
 		
+	def showRegInfoR0(self):
+		self.showRegInfo("000")
+	def showRegInfoR1(self):
+		self.showRegInfo("001")
+	def showRegInfoR2(self):
+		self.showRegInfo("010")
+	def showRegInfoR3(self):
+		self.showRegInfo("011")
+	def showRegInfoR4(self):
+		self.showRegInfo("100")
+	def showRegInfoR5(self):
+		self.showRegInfo("101")
+	def showRegInfoR6(self):
+		self.showRegInfo("110")
+	def showRegInfoR7(self):
+		self.showRegInfo("111")
+	def showRegInfoPC(self):
+		self.showRegInfo("pc")
+
+	def showRegInfo(self, reg):
+		"""
+		Shows a dialog box with the info of the register
+		"""
+		info = ""
+		info += "Integer : " + str(int(self.regbank[reg], 16)) + "\n"
+		info += "Hexadecimal : " + self.regbank[reg] + "\n"
+		bin = hextobin(self.regbank[reg])
+		info += "Binary : " + bin[-16:-12] + " " + bin[-12:-8] + " " + bin[-8:-4] + " " + bin[-4:] + "\n"
+		QtGui.QMessageBox.information(self, 'Register Information', info, QtGui.QMessageBox.Ok)
 	
 if __name__ == '__main__':
 	qApp = QtGui.QApplication(sys.argv)
