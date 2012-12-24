@@ -177,16 +177,6 @@ class PyASM(QtGui.QMainWindow):
 		file = open(file, 'r')
 		self.ui.instructions.setText(file.read())
 		file.close()
-		addr, ok = QtGui.QInputDialog.getText(self, 'Input Dialog', 'Enter starting address to place instructions (default : 0000)')
-		if not ok or addr == "":
-			addr = "0000"
-		addr = int(addr, 16)
-		tmp, ok = QtGui.QInputDialog.getText(self, 'Input Dialog', 'Enter value of PC (default : 0000)')
-		if not ok or tmp == "":
-			tmp = "0000"
-		self.pc = int(int(tmp, 16)/2)
-		self.initialPC = self.pc
-		self.initialLoadAddress = addr
 		self.loadInstructions()
 		
 	def loadInstructions(self):
@@ -203,14 +193,16 @@ class PyASM(QtGui.QMainWindow):
 		self.regbank["111"] = "0000"
 		self.regbank["flags"] = "0000"
 		self.regbank["pc"] = "0000"
-		sp, ok = QtGui.QInputDialog.getText(self, 'Input Dialog', 'Enter value of start of Stack (default : FFFE)')
-		if not ok or sp == "":
-			self.regbank["sp"] = "FFFE"
-		else:
-			self.regbank["sp"] = sp
-		
-		self.pc = self.initialPC
-		i = self.initialLoadAddress
+		self.regbank["sp"] = "FFFE"
+		addr, ok = QtGui.QInputDialog.getText(self, 'Input Dialog', 'Enter starting address to place instructions (default : 0000)')
+		if not ok or addr == "":
+			addr = "0000"
+		addr = int(addr, 16)
+		tmp, ok = QtGui.QInputDialog.getText(self, 'Input Dialog', 'Enter value of PC (default : 0000)')
+		if not ok or tmp == "":
+			tmp = "0000"
+		self.pc = int(int(tmp, 16)/2)
+		i = addr
 		
 		instructions = self.ui.instructions.toPlainText().split("\n")
 		for inst in instructions:
