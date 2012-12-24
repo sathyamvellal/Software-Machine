@@ -237,9 +237,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>400</y>
+      <y>360</y>
       <width>131</width>
-      <height>61</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="font">
@@ -283,20 +283,17 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="sp">
+   <widget class="QCheckBox" name="flagZ">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>360</y>
-      <width>131</width>
-      <height>31</height>
+      <x>20</x>
+      <y>420</y>
+      <width>16</width>
+      <height>19</height>
      </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Ubuntu</family>
-      <pointsize>12</pointsize>
-     </font>
     </property>
     <property name="text">
      <string/>
@@ -304,7 +301,61 @@
     <property name="checkable">
      <bool>false</bool>
     </property>
-    <property name="checked">
+   </widget>
+   <widget class="QCheckBox" name="flagE">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>420</y>
+      <width>16</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="flagG">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>420</y>
+      <width>16</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="flagL">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>420</y>
+      <width>16</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="checkable">
      <bool>false</bool>
     </property>
    </widget>
@@ -350,8 +401,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>129</width>
-      <height>389</height>
+      <width>127</width>
+      <height>387</height>
      </rect>
     </property>
     <widget class="QTextEdit" name="instructions">

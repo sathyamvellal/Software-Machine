@@ -101,6 +101,7 @@ class PyASM(QtGui.QMainWindow):
 			self.ui.memory.setItem(row, 1, self.newItem("0000"))
 			self.ui.memory.item(row, 0).setFlags(QtCore.Qt.ItemIsSelectable)
 			i += 2
+		self.ui.flags.setText("Flags:\nZ     E     G     L  .\n")
 		self.updateUI()
 		self.show()
 	
@@ -118,12 +119,11 @@ class PyASM(QtGui.QMainWindow):
 		self.ui.r7.setText("r7:	 " + self.regbank["111"])
 		self.regbank["pc"] = inttohex(2 * self.pc)
 		self.ui.pc.setText("pc:	 " + self.regbank["pc"])
-		self.ui.sp.setText("sp:	 " + self.regbank["sp"])
 		tmp = hextobin(self.regbank["flags"])
-		self.ui.flags.setText("Flags:\n" + "Z" + tmp[-16] + 
-							  ", E" + tmp[-15] + 
-							  ", G" + tmp[-14] +
-							  ", L" + tmp[-13])
+		self.ui.flagZ.setCheckState(int(tmp[-16]))
+		self.ui.flagE.setCheckState(int(tmp[-15]))
+		self.ui.flagG.setCheckState(int(tmp[-14]))
+		self.ui.flagL.setCheckState(int(tmp[-13]))
 		
 	def initSIM(self):
 		"""

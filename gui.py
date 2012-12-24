@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'PyASM.ui'
 #
-# Created: Tue Oct 16 05:39:54 2012
-#      by: PyQt4 UI code generator 4.9.4
+# Created: Mon Dec 24 13:08:16 2012
+#      by: PyQt4 UI code generator 4.9.5
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -107,7 +107,7 @@ class Ui_Form(object):
         self.r4.setChecked(False)
         self.r4.setObjectName(_fromUtf8("r4"))
         self.flags = QtGui.QPushButton(self.regBank)
-        self.flags.setGeometry(QtCore.QRect(10, 400, 131, 61))
+        self.flags.setGeometry(QtCore.QRect(10, 360, 131, 101))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Ubuntu"))
         font.setPointSize(12)
@@ -126,16 +126,30 @@ class Ui_Form(object):
         self.pc.setCheckable(False)
         self.pc.setChecked(False)
         self.pc.setObjectName(_fromUtf8("pc"))
-        self.sp = QtGui.QPushButton(self.regBank)
-        self.sp.setGeometry(QtCore.QRect(10, 360, 131, 31))
-        font = QtGui.QFont()
-        font.setFamily(_fromUtf8("Ubuntu"))
-        font.setPointSize(12)
-        self.sp.setFont(font)
-        self.sp.setText(_fromUtf8(""))
-        self.sp.setCheckable(False)
-        self.sp.setChecked(False)
-        self.sp.setObjectName(_fromUtf8("sp"))
+        self.flagZ = QtGui.QCheckBox(self.regBank)
+        self.flagZ.setEnabled(True)
+        self.flagZ.setGeometry(QtCore.QRect(20, 420, 16, 19))
+        self.flagZ.setText(_fromUtf8(""))
+        self.flagZ.setCheckable(False)
+        self.flagZ.setObjectName(_fromUtf8("flagZ"))
+        self.flagE = QtGui.QCheckBox(self.regBank)
+        self.flagE.setEnabled(True)
+        self.flagE.setGeometry(QtCore.QRect(50, 420, 16, 19))
+        self.flagE.setText(_fromUtf8(""))
+        self.flagE.setCheckable(False)
+        self.flagE.setObjectName(_fromUtf8("flagE"))
+        self.flagG = QtGui.QCheckBox(self.regBank)
+        self.flagG.setEnabled(True)
+        self.flagG.setGeometry(QtCore.QRect(80, 420, 16, 19))
+        self.flagG.setText(_fromUtf8(""))
+        self.flagG.setCheckable(False)
+        self.flagG.setObjectName(_fromUtf8("flagG"))
+        self.flagL = QtGui.QCheckBox(self.regBank)
+        self.flagL.setEnabled(True)
+        self.flagL.setGeometry(QtCore.QRect(110, 420, 16, 19))
+        self.flagL.setText(_fromUtf8(""))
+        self.flagL.setCheckable(False)
+        self.flagL.setObjectName(_fromUtf8("flagL"))
         self.step = QtGui.QPushButton(Form)
         self.step.setGeometry(QtCore.QRect(170, 470, 131, 31))
         font = QtGui.QFont()
@@ -151,7 +165,7 @@ class Ui_Form(object):
         self.instructioHolder.setWidgetResizable(True)
         self.instructioHolder.setObjectName(_fromUtf8("instructioHolder"))
         self.scrollAreaWidgetContents_2 = QtGui.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 129, 389))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 127, 387))
         self.scrollAreaWidgetContents_2.setObjectName(_fromUtf8("scrollAreaWidgetContents_2"))
         self.instructions = QtGui.QTextEdit(self.scrollAreaWidgetContents_2)
         self.instructions.setGeometry(QtCore.QRect(0, 0, 131, 391))
@@ -195,14 +209,4 @@ class Ui_Form(object):
         item = self.memory.horizontalHeaderItem(1)
         item.setText(QtGui.QApplication.translate("Form", "Data", None, QtGui.QApplication.UnicodeUTF8))
         self.run.setText(QtGui.QApplication.translate("Form", "Run (F5)", None, QtGui.QApplication.UnicodeUTF8))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    Form = QtGui.QWidget()
-    ui = Ui_Form()
-    ui.setupUi(Form)
-    Form.show()
-    sys.exit(app.exec_())
 
